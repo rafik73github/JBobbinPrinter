@@ -47,7 +47,6 @@ public class PrintFrame extends JFrame {
         printPanel.add(yarnWeightInput);
 
 
-
         JButton addYarnButton = new JButton("DODAJ DO LISTY");
         addYarnButton.setBounds(20,60,265,60);
         printPanel.add(addYarnButton);
@@ -55,6 +54,17 @@ public class PrintFrame extends JFrame {
         JButton getYarnButton = new JButton("POKAŻ PRZĘDZE");
         getYarnButton.setBounds(295,60,265,60);
         printPanel.add(getYarnButton);
+
+        JComboBox<String> combo = new JComboBox<>();
+        combo.setBounds(20,130,265,30);
+        printPanel.add(combo);
+
+        Map<Integer, Yarn> showList1 = YarnSQL.getYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),"yarns", 0);
+        if(showList1 != null) {
+            for (int i : showList1.keySet()) {
+                combo.addItem(showList1.get(i).getYarnName() + "      " + showList1.get(i).getYarnType() + "       " + showList1.get(i).getYarnWeight());
+            }
+        }
 
         JButton backToMainMenuButton = new JButton("MENU GŁÓWNE");
         backToMainMenuButton.setBounds(20,570,265,60);
@@ -70,11 +80,11 @@ public class PrintFrame extends JFrame {
             inputYarnName = yarnNameInput.getText();
             inputYarnType = yarnTypeInput.getText();
             inputYarnWeight = yarnWeightInput.getText();
-            JavaDB.addYarnToSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),"yarns",new Yarn(inputYarnName,inputYarnType,inputYarnWeight));
+            YarnSQL.addYarnToSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),"yarns",new Yarn(inputYarnName,inputYarnType,inputYarnWeight));
         });
 
         getYarnButton.addActionListener(e ->{
-            Map<Integer, Yarn> showList = JavaDB.getYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),"yarns", 0);
+            Map<Integer, Yarn> showList = YarnSQL.getYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),"yarns", 0);
 
             if(showList != null) {
                 for (int i : showList.keySet()) {

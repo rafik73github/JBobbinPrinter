@@ -40,7 +40,7 @@ public class MainMenuFrame extends JFrame {
 
         openPrintPanelButton.addActionListener(e -> {
 
-            JavaDB.createYarnsTable(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")));
+            YarnSQL.createYarnsTable(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")));
             setVisible(false);
             new PrintFrame().setVisible(true);
 
@@ -48,7 +48,10 @@ public class MainMenuFrame extends JFrame {
 
         openPropPanelButton.addActionListener(e -> {
 
-            JavaDB.createYarnsTable(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")));
+            YarnSQL.createYarnsTable(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")));
+            YarnTypesSQL.createYarnsTypeTable(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")));
+            YarnWeightSQL.createYarnsWeightTable(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")));
+
             setVisible(false);
             new PrefsFrame().setVisible(true);
 
