@@ -1,17 +1,18 @@
 package pl.jbobbinprinter;
 
 import java.awt.*;
-import java.io.IOException;
+import java.util.Objects;
 
 public class Main {
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
+        EventQueue.invokeLater(MainMenuFrame::new);
 
-            new MainMenuFrame();
+        //JavaDB.connectDB("yarns");
+       // JavaDB.createYarnsTable(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")));
 
 
-        });
+
 
     }
 }
