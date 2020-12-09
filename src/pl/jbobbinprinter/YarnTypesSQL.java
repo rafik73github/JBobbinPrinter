@@ -70,6 +70,25 @@ public class YarnTypesSQL {
         }
     }
 
+    public static void updateYarnTypeFromSQL(Connection conn, int key, YarnTypes yarnType, int archived){
+        Statement stat;
+        try{
+            stat = conn.createStatement();
+            String updateYarnTypeString = "UPDATE yarns_types "
+                    + "SET "
+                    + "YARN_TYPE = '" + yarnType.getType() + "',"
+                    + "YARN_TYPE_ARCHIVED = " + archived +
+                    " WHERE ID_YARN_TYPE = " + key;
+
+            stat.executeUpdate(updateYarnTypeString);
+            stat.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void deleteYarnTypeFromSQL(Connection conn, int key){
         Statement stat;
         try{

@@ -71,6 +71,25 @@ public class YarnWeightSQL {
 
     }
 
+    public static void updateYarnWeightFromSQL(Connection conn, int key, YarnWeight yarnWeight, int archived){
+        Statement stat;
+        try{
+            stat = conn.createStatement();
+            String updateYarnWeightString = "UPDATE yarns_weights "
+                    + "SET "
+                    + "YARN_WEIGHT = '" + yarnWeight.getWeight() + "',"
+                    + "YARN_WEIGHT_ARCHIVED = " + archived +
+                    " WHERE ID_YARN_WEIGHT = " + key;
+
+            stat.executeUpdate(updateYarnWeightString);
+            stat.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void deleteYarnWeightFromSQL(Connection conn, int key){
         Statement stat;
         try{
