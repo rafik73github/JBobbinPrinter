@@ -2,7 +2,6 @@ package pl.jbobbinprinter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
 import java.util.Objects;
 
 public class PrintFrame extends JFrame {
@@ -11,6 +10,7 @@ public class PrintFrame extends JFrame {
     String inputYarnName;
     String inputYarnType;
     String inputYarnWeight;
+
 
     public PrintFrame(){
 
@@ -51,19 +51,21 @@ public class PrintFrame extends JFrame {
         addYarnButton.setBounds(20,60,265,60);
         printPanel.add(addYarnButton);
 
-        JButton getYarnButton = new JButton("POKAŻ PRZĘDZE");
-        getYarnButton.setBounds(295,60,265,60);
-        printPanel.add(getYarnButton);
+        JButton deleteYarnButton = new JButton("USUŃ PRZĘDZE");
+        deleteYarnButton.setBounds(295,60,265,60);
+        printPanel.add(deleteYarnButton);
 
-        JComboBox<String> combo = new JComboBox<>();
+        JComboBox<Yarn> combo = new JComboBox<>();
         combo.setBounds(20,130,265,30);
         printPanel.add(combo);
 
-        Map<Integer, Yarn> showList1 = YarnSQL.getYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),"yarns", 0);
-        if(showList1 != null) {
-            for (int i : showList1.keySet()) {
-                combo.addItem(showList1.get(i).getYarnName() + "      " + showList1.get(i).getYarnType() + "       " + showList1.get(i).getYarnWeight());
-            }
+
+        YarnSQL.getYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),0, combo);
+
+        if(combo.getSelectedItem() != null) {
+            yarnNameInput.setText(((Yarn) combo.getSelectedItem()).getYarnName());
+            yarnTypeInput.setText(((Yarn) combo.getSelectedItem()).getYarnType());
+            yarnWeightInput.setText(((Yarn) combo.getSelectedItem()).getYarnWeight());
         }
 
         JButton backToMainMenuButton = new JButton("MENU GŁÓWNE");
@@ -75,24 +77,36 @@ public class PrintFrame extends JFrame {
         printPanel.add(exitProgramFromPrintButton);
 
 
+        combo.addActionListener(e -> {
+if(combo.getSelectedItem() != null) {
+    yarnNameInput.setText(((Yarn) combo.getSelectedItem()).getYarnName());
+    yarnTypeInput.setText(((Yarn) combo.getSelectedItem()).getYarnType());
+    yarnWeightInput.setText(((Yarn) combo.getSelectedItem()).getYarnWeight());
+}
+        });
 
         addYarnButton.addActionListener(e -> {
             inputYarnName = yarnNameInput.getText();
             inputYarnType = yarnTypeInput.getText();
             inputYarnWeight = yarnWeightInput.getText();
-            YarnSQL.addYarnToSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),"yarns",new Yarn(inputYarnName,inputYarnType,inputYarnWeight));
+            YarnSQL.addYarnToSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),new Yarn(inputYarnName,inputYarnType,inputYarnWeight));
+            combo.removeAllItems();
+            YarnSQL.getYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),0, combo);
         });
 
-        getYarnButton.addActionListener(e ->{
-            Map<Integer, Yarn> showList = YarnSQL.getYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),"yarns", 0);
+        deleteYarnButton.addActionListener(e ->{
+            inputYarnName = yarnNameInput.getText();
+            inputYarnType = yarnTypeInput.getText();
+            inputYarnWeight = yarnWeightInput.getText();
+           int getKeyFromCombo = ((Yarn) Objects.requireNonNull(combo.getSelectedItem())).getYarnKey();
 
-            if(showList != null) {
-                for (int i : showList.keySet()) {
-                    System.out.println("key: " + showList.get(i).getYarnKey() + " | name: " + showList.get(i).getYarnName() +
-                            " | type: " + showList.get(i).getYarnType() + " | weight: " + showList.get(i).getYarnWeight() +
-                    " | archived: " + showList.get(i).getYarnArchived());
-                }
-            }
+           YarnSQL.updateYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), getKeyFromCombo,new Yarn(inputYarnName,inputYarnType,inputYarnWeight), 0 );
+          // YarnSQL.deleteYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), getKeyFromCombo);
+
+            combo.removeAllItems();
+            YarnSQL.getYarnFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),0, combo);
+
+
         });
 
         backToMainMenuButton.addActionListener(e -> {

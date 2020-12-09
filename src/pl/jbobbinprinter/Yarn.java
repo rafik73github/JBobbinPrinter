@@ -75,4 +75,9 @@ public class Yarn {
         listToAdd.clear();
     }
 
+    @Override
+   public String toString(){
+        return yarnName;
+   }
+
 }

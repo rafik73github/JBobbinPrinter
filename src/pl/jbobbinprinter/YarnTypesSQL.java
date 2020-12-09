@@ -1,5 +1,6 @@
 package pl.jbobbinprinter;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,15 +38,14 @@ public class YarnTypesSQL {
             stat.executeUpdate(addYarnTypeString);
             stat.close();
             conn.close();
-            System.out.println("Command: " + addYarnTypeString + " executed!");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static Map<Integer, YarnTypes> getYarnTypeFromSQL(Connection conn, int archived){
-        Map<Integer, YarnTypes> result = new TreeMap<>();
-        int counter = 0;
+    public static void getYarnTypeFromSQL(Connection conn, int archived, JComboBox<YarnTypes> jCB){
+
         Statement stat;
 
         try{
@@ -55,9 +55,10 @@ public class YarnTypesSQL {
             ResultSet resultSet = stat.executeQuery(getYarnTypeString);
 
             while (resultSet.next()){
-                result.put(counter,new YarnTypes(resultSet.getInt("ID_YARN_TYPE"), resultSet.getString("YARN_TYPE"),
+
+                jCB.addItem(new YarnTypes(resultSet.getInt("ID_YARN_TYPE"), resultSet.getString("YARN_TYPE"),
                         resultSet.getInt("YARN_TYPE_ARCHIVED")));
-                counter++;
+
             }
             resultSet.close();
             stat.close();
@@ -65,10 +66,23 @@ public class YarnTypesSQL {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
-        }
 
-        return result;
+        }
+    }
+
+    public static void deleteYarnTypeFromSQL(Connection conn, int key){
+        Statement stat;
+        try{
+            stat = conn.createStatement();
+            String deleteYarnTypeString = "DELETE FROM yarns_types WHERE ID_YARN_TYPE = " + key;
+
+            stat.executeUpdate(deleteYarnTypeString);
+            stat.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

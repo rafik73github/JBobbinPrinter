@@ -1,5 +1,6 @@
 package pl.jbobbinprinter;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,15 +38,14 @@ public class YarnWeightSQL {
             stat.executeUpdate(addYarnWeightString);
             stat.close();
             conn.close();
-            System.out.println("Command: " + addYarnWeightString + " executed!");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static Map<Integer, YarnWeight> getYarnWeightFromSQL(Connection conn, int archived){
-        Map<Integer, YarnWeight> result = new TreeMap<>();
-        int counter = 0;
+    public static void getYarnWeightFromSQL(Connection conn, int archived, JComboBox<YarnWeight> jCB){
+
         Statement stat;
 
         try{
@@ -55,9 +55,10 @@ public class YarnWeightSQL {
             ResultSet resultSet = stat.executeQuery(getYarnWeightString);
 
             while (resultSet.next()){
-                result.put(counter,new YarnWeight(resultSet.getInt("ID_YARN_WEIGHT"), resultSet.getString("YARN_WEIGHT"),
+
+                jCB.addItem(new YarnWeight(resultSet.getInt("ID_YARN_WEIGHT"), resultSet.getString("YARN_WEIGHT"),
                         resultSet.getInt("YARN_WEIGHT_ARCHIVED")));
-                counter++;
+
             }
             resultSet.close();
             stat.close();
@@ -65,10 +66,24 @@ public class YarnWeightSQL {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+
         }
 
-        return result;
+    }
+
+    public static void deleteYarnWeightFromSQL(Connection conn, int key){
+        Statement stat;
+        try{
+            stat = conn.createStatement();
+            String deleteYarnWeightString = "DELETE FROM yarns_weights WHERE ID_YARN_WEIGHT = " + key;
+
+            stat.executeUpdate(deleteYarnWeightString);
+            stat.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

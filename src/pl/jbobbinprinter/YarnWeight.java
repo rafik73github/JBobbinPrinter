@@ -47,4 +47,9 @@ public class YarnWeight {
     public void setWeightArchived(int weightArchived) {
         this.weightArchived = weightArchived;
     }
+
+    @Override
+    public String toString(){
+        return weight;
+    }
 }

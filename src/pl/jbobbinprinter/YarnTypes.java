@@ -46,4 +46,9 @@ public class YarnTypes {
     public void setTypeArchived(int typeArchived) {
         this.typeArchived = typeArchived;
     }
+
+    @Override
+    public String toString(){
+        return type;
+    }
 }
