@@ -68,6 +68,36 @@ public class YarnTypesSQL {
         }
     }
 
+    public static void getYarnTypeFromSQLToList(Connection conn, int archived, JList<YarnTypes> jT){
+
+        Statement stat;
+        DefaultListModel<YarnTypes> dLM = new DefaultListModel<>();
+
+        try{
+            stat = conn.createStatement();
+            String getYarnTypeString = "SELECT * FROM yarns_types WHERE YARN_TYPE_ARCHIVED = " + archived + " ORDER BY YARN_TYPE ASC";
+
+            ResultSet resultSet = stat.executeQuery(getYarnTypeString);
+
+            while (resultSet.next()){
+
+                dLM.addElement(new YarnTypes(resultSet.getInt("ID_YARN_TYPE"), resultSet.getString("YARN_TYPE"),
+                        resultSet.getInt("YARN_TYPE_ARCHIVED")));
+
+            }
+
+            jT.setModel(dLM);
+            resultSet.close();
+            stat.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+
+    }
+
     public static void updateYarnTypeFromSQL(Connection conn, int key, YarnTypes yarnType, int archived){
         Statement stat;
         try{
@@ -100,6 +130,33 @@ public class YarnTypesSQL {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean checkIfYarnTypeExist(Connection conn, String yarnTypeToCheck){
+        int counter = 0;
+        boolean result = false;
+        Statement stat;
+        try{
+            stat = conn.createStatement();
+            String checkYarnTypeString = "SELECT * FROM yarns_types WHERE YARN_TYPE = '" + yarnTypeToCheck + "'";
+
+            ResultSet resultSet = stat.executeQuery(checkYarnTypeString);
+
+            while (resultSet.next()){
+                counter++;
+            }
+            if(counter > 0){result = true;}
+
+            resultSet.close();
+            stat.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+
+        return result;
     }
 
 }
