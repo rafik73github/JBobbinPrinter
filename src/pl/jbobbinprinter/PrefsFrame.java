@@ -22,12 +22,19 @@ public class PrefsFrame extends JFrame {
         prefsPanel.setLayout(null);
         add(prefsPanel);
 
+        JTabbedPane prefsFrameTab = new JTabbedPane();
+        prefsFrameTab.setBounds(20,20,545,540);
+        prefsFrameTab.addTab("PRZĘDZE", new YarnTab());
+        prefsFrameTab.addTab("TYPY PRZĘDZ", new YarnTypesTab());
+        prefsFrameTab.addTab("GRUBOŚĆ PRZĘDZ", new YarnWeightsTab());
+        prefsPanel.add(prefsFrameTab);
+
         JButton backToMainMenuButton = new JButton("MENU GŁÓWNE");
         backToMainMenuButton.setBounds(20,570,265,60);
         prefsPanel.add(backToMainMenuButton);
 
         JButton exitProgramFromPrefsButton = new JButton("ZAKOŃCZ");
-        exitProgramFromPrefsButton.setBounds(295,570,265,60);
+        exitProgramFromPrefsButton.setBounds(300,570,265,60);
         prefsPanel.add(exitProgramFromPrefsButton);
 
 

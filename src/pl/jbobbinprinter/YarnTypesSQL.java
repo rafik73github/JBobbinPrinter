@@ -5,8 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class YarnTypesSQL {
 
@@ -44,7 +42,7 @@ public class YarnTypesSQL {
         }
     }
 
-    public static void getYarnTypeFromSQL(Connection conn, int archived, JComboBox<YarnTypes> jCB){
+    public static void getYarnTypeFromSQLToCombo(Connection conn, int archived, JComboBox<YarnTypes> jCB){
 
         Statement stat;
 

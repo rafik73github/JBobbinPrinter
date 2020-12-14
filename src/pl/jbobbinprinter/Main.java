@@ -8,11 +8,5 @@ public class Main {
     public static void main(String[] args) {
         EventQueue.invokeLater(MainMenuFrame::new);
 
-
-       // YarnSQL.createYarnsTable(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")));
-
-
-
-
     }
 }

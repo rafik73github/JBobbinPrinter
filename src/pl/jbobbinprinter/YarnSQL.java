@@ -46,7 +46,7 @@ public class YarnSQL {
         }
     }
 
-       public static void getYarnFromSQL(Connection conn, int archived, JComboBox<Yarn> jCB){
+       public static void getYarnFromSQLToCombo(Connection conn, int archived, JComboBox<Yarn> jCB){
         Statement stat;
 
         try{
