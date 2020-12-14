@@ -22,28 +22,28 @@ public class YarnTypesTab extends JPanel {
         yarnTypeInput.setBounds(20,50,265,30);
         add(yarnTypeInput);
 
-        JButton addTypeButton = new JButton("DODAJ GRUBOŚĆ");
+        JButton addTypeButton = new JButton("DODAJ TYP");
         addTypeButton.setBounds(20,90,265,60);
         add(addTypeButton);
 
         JLabel listOfTypeLabel = new JLabel();
         listOfTypeLabel.setBounds(20,170,265,30);
         listOfTypeLabel.setForeground(new Color(245,245,245));
-        listOfTypeLabel.setText("LISTA GRUBOŚCI PRZĘDZY:");
+        listOfTypeLabel.setText("LISTA TYPÓW PRZĘDZY:");
         add(listOfTypeLabel);
 
-        JList<YarnWeight> yarnTypeList = new JList<>();
+        JList<YarnTypes> yarnTypeList = new JList<>();
         yarnTypeList.setBounds(20,200,265,100);
         yarnTypeList.setSelectedIndex(0);
 
-        YarnWeightSQL.getYarnWeightFromSQLToList(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),0,yarnTypeList);
+        YarnTypesSQL.getYarnTypeFromSQLToList(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),0,yarnTypeList);
 
         add(yarnTypeList);
 
         JLabel editTypeLabel = new JLabel();
         editTypeLabel.setBounds(20,320,265,30);
         editTypeLabel.setForeground(new Color(245,245,245));
-        editTypeLabel.setText("GRUBOŚĆ DO EDYCJI WYBRANA Z LISTY:");
+        editTypeLabel.setText("TYP DO EDYCJI WYBRANY Z LISTY:");
         add(editTypeLabel);
 
         JTextField editTypeInput = new JTextField();
@@ -54,7 +54,6 @@ public class YarnTypesTab extends JPanel {
         editTypeButton.setBounds(20,390,265,60);
         add(editTypeButton);
 
-
         addTypeButton.addActionListener(e -> {
             String addTypeText = yarnTypeInput.getText().trim().toUpperCase(Locale.ROOT);
 
@@ -62,35 +61,35 @@ public class YarnTypesTab extends JPanel {
                 JOptionPane.showMessageDialog(this, "Nic nie wpisano !");
             }else {
 
-                if(YarnWeightSQL.checkIfYarnWeightExist(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),addTypeText)){
-                    JOptionPane.showMessageDialog(this, "Taka grubość już istnieje !");
+                if(YarnTypesSQL.checkIfYarnTypeExist(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")),addTypeText)){
+                    JOptionPane.showMessageDialog(this, "Taki typ już istnieje !");
                     yarnTypeInput.setText("");
                 }else{
-                    YarnWeightSQL.addYarnWeightToSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), new YarnWeight(addTypeText));
+                    YarnTypesSQL.addYarnTypeToSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), new YarnTypes(addTypeText));
                     yarnTypeInput.setText("");
-                    YarnWeightSQL.getYarnWeightFromSQLToList(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), 0, yarnTypeList);
+                    YarnTypesSQL.getYarnTypeFromSQLToList(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), 0, yarnTypeList);
                 }
             }
         });
 
         yarnTypeList.addListSelectionListener(e -> {
-            YarnWeight yarnWeightListObjectToEdit = yarnTypeList.getSelectedValue();
-            if(yarnWeightListObjectToEdit != null) {
-                editTypeInput.setText(yarnWeightListObjectToEdit.getWeight());
+            YarnTypes yarnTypeListObjectToEdit = yarnTypeList.getSelectedValue();
+            if(yarnTypeListObjectToEdit != null) {
+                editTypeInput.setText(yarnTypeListObjectToEdit.getType());
             }
         });
 
         editTypeButton.addActionListener(e -> {
             if(editTypeInput.getText().equals("")){
-                JOptionPane.showMessageDialog(this, "Nie wybrano grubości z listy !");
+                JOptionPane.showMessageDialog(this, "Nie wybrano typu z listy !");
             }else {
-                YarnWeight yarnWeightListObjectToSave = yarnTypeList.getSelectedValue();
-                int yarnWeightId = yarnWeightListObjectToSave.getWeightId();
-                String yarnWeight = editTypeInput.getText().trim().toUpperCase(Locale.ROOT);
-                int yarnWeightArchived = 0;
-                YarnWeightSQL.updateYarnWeightFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), new YarnWeight(yarnWeightId, yarnWeight, yarnWeightArchived));
+                YarnTypes yarnTypeListObjectToSave = yarnTypeList.getSelectedValue();
+                int yarnTypeId = yarnTypeListObjectToSave.getTypeId();
+                String yarnType = editTypeInput.getText().trim().toUpperCase(Locale.ROOT);
+                int yarnTypeArchived = 0;
+                YarnTypesSQL.updateYarnTypeFromSQL(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), new YarnTypes(yarnTypeId, yarnType, yarnTypeArchived));
                 editTypeInput.setText("");
-                YarnWeightSQL.getYarnWeightFromSQLToList(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), 0, yarnTypeList);
+                YarnTypesSQL.getYarnTypeFromSQLToList(Objects.requireNonNull(JavaDB.connectDB("yarnsDB")), 0, yarnTypeList);
             }
         });
 

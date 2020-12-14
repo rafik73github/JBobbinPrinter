@@ -98,15 +98,15 @@ public class YarnTypesSQL {
 
     }
 
-    public static void updateYarnTypeFromSQL(Connection conn, int key, YarnTypes yarnType, int archived){
+    public static void updateYarnTypeFromSQL(Connection conn, YarnTypes yarnType){
         Statement stat;
         try{
             stat = conn.createStatement();
             String updateYarnTypeString = "UPDATE yarns_types "
                     + "SET "
                     + "YARN_TYPE = '" + yarnType.getType() + "',"
-                    + "YARN_TYPE_ARCHIVED = " + archived +
-                    " WHERE ID_YARN_TYPE = " + key;
+                    + "YARN_TYPE_ARCHIVED = " + yarnType.getTypeArchived() +
+                    " WHERE ID_YARN_TYPE = " + yarnType.getTypeId();
 
             stat.executeUpdate(updateYarnTypeString);
             stat.close();
